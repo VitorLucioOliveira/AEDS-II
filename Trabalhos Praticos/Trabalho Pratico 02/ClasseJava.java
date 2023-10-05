@@ -29,7 +29,7 @@ class Jogador {
                 String linha = scan.nextLine(); // le a linha
                 String[] elementos = linha.split(",", -1); // divide a linha pela virgula e faz um array
 
-                for (int i = 0; i < elementos.length; i++) {
+                for (int i = 0; i < elementos.length; i++) { // subistitui as informações nular por "não encontrado"
                     if (elementos[i].isEmpty()) {
                         elementos[i] = "nao informado";
                     }
