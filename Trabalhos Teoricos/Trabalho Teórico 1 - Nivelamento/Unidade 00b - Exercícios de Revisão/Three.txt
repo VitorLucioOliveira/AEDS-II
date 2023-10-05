@@ -1,0 +1,18 @@
+/O_que_isso_faz?
+
+boolean doidao (char c)(
+    boolean resp= false;
+    int v = (int) c;
+    if (v == 65 || v == 69 || v==73 || v==79 || v==85|| v==97 || v==101 || v==105 ||
+    v==111||v==117)
+    resp = true;
+    )
+    return resp;
+    )
+
+/resposta
+
+Essa função recebe um "char", converte esse char para seu falor em int (tabela Unicode),
+depois comparar com outras "letras"(em Unicode tambem),
+retornando um valor booleando true se o "c" for uma dessas letras;
+
