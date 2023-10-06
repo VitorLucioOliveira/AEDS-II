@@ -4,11 +4,11 @@ public class Eight {
     {
     }
 
-    int m1(int i){
-        return i--; // decrementa 1 de i, depois de retornar o valor original de i
+    int m1(int o){
+        return o--; // decrementa 1 de i, depois de retornar o valor original de i
         }
-        int m2(int i){
-        return --i; // decrementa 1 de i, antes de retornar o valor  de i-1
+        int m2(int o){
+        return --o; // decrementa 1 de i, antes de retornar o valor  de i-1
         }
 
 
