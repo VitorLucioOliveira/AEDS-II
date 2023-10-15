@@ -164,7 +164,7 @@ public class CountingJava {
         try {
             File logFile = new File(fileName);
             FileWriter writer = new FileWriter(logFile);
-            writer.write("810862" + "\t" + duration + "\t" + contador + "\t" + moves);
+            writer.write("810862" + "\t" +contador + "\t" + moves + "\t" +  duration);
             writer.close();
         } catch (IOException e) {
             System.out.println("An error occurred.");
