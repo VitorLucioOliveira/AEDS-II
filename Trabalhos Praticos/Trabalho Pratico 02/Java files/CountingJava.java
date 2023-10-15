@@ -159,7 +159,7 @@ public class CountingJava {
 
     // Criar log
     public static void criarLog() {
-        String fileName = "tmp/810862_heapsort.txt.";
+        String fileName = "tmp/810862_countingsort.txt";
 
         try {
             File logFile = new File(fileName);
@@ -172,72 +172,11 @@ public class CountingJava {
         }
     }
 
-    public static void doHeap(Jogadores jogadores[], int i, int fim) {
-
-        int raiz = i; // salva o vetor inicial
-        int esquerda = 2 * i + 1; // salva o vetor da esquerda da arvore
-        int direita = 2 * i + 2; // salva o vetor da direita da arvore
-
-        if (esquerda < fim && jogadores[esquerda].getAltura() > jogadores[raiz].getAltura()) { // compara a altura da
-                                                                                               // esquerda com a raiz
-            contador++;
-            raiz = esquerda;// troca a raiz pelo maior valor
-        }
-
-        if (direita < fim && jogadores[direita].getAltura() > jogadores[raiz].getAltura()) { // compara a altura da
-                                                                                             // direita com a raiz
-            contador++;
-            raiz = direita;// troca a raiz pelo maior valor
-        }
-
-        if (raiz != i) {
-            contador++;
-            Jogadores aux = jogadores[i];// raiz original
-            jogadores[i] = jogadores[raiz];// troca a raiz pelo maior valor encontrado
-            jogadores[raiz] = aux;// troca o maior valor encontrado pelo valor original da raiz
-            moves++;
-            doHeap(jogadores, raiz, fim); // chama a função novamente para ordenar as raizes trocadas da arvore
-                                          // subsequentes a raiz original que era i
-        }
-
-    }
-
-    // ordenar heap sort
-    public static void heapsort(int fim, Jogadores jogadores[]) {
-
-          long startTime = System.nanoTime();
-        ;// tempo de inicio de execução
-
-        /*
-         * Referente ao FOR a seguir.
-         * O FOR, tem a função de tornar as raizes da arvore os meiores elementos.
-         * Ou seja, os maiores elementos pai do vetor estão na primeira metada da arvore
-         * e são maiores que os filhos.
-         */
-        for (int i = ((fim / 2) - 1); i >=0; i--) {
-            contador++;
-            doHeap(jogadores, i, fim);
-        }
-
-        /*
-         * Referente ao FOR a seguir.
-         * O FOR, tem a função de jogar os maiores elementos do vetor para o final.
-         * Depois, para garantir a organização, ele chama a função doHeap para ordenar
-         * novamente a arvore nova criada.
-         */
-
-        for (int i = fim - 1; i >= 0; i--) {
-            contador++;
-            Jogadores aux = jogadores[0];
-            jogadores[0] = jogadores[i];
-            jogadores[i] = aux;
-            moves++;
-            doHeap(jogadores, 0, i);
-        }
+    public static void alfabetica(int fim, Jogadores jogadores[]) {
 
         for (int i = 0; i < fim; i++) { // organiza por ordem alfabetica os Jogadoreses com a mesma altura
             contador++;
-            for (int j = i+1; j < fim; j++) {
+            for (int j = i + 1; j < fim; j++) {
                 contador++;
                 if (jogadores[i].getAltura() == jogadores[j].getAltura()) {
                     contador++;
@@ -251,14 +190,76 @@ public class CountingJava {
                 }
             }
         }
+    }
 
-         long endTime = System.nanoTime();// tempo de fim de execução
-           duration = (endTime - startTime);// tempo de execução
+    // ordenar os Jogadoreses
+    public static void countSort(int fim, Jogadores jogadores[]) {
+        // tempo de inicio de execução
+        long startTime = System.nanoTime();
+
+        int maior = jogadores[0].getAltura();
+        Jogadores[] jogadoresC = new Jogadores[fim];
+
+        // achar o maior elemento do array
+        for (int i = 0; i < fim; i++) {
+            contador++;
+            if (jogadores[i].getAltura() > maior) {
+                maior = jogadores[i].getAltura();
+            }
+        }
+
+        // Agora vou só deixar na forma alfabetica
+
+        // jarray auxiliar para contar as ocorrencias dos elementos
+
+        int[] aux = new int[maior + 1];
+
+        // inicialuza o array auxiliar
+        for (int i = 0; i <= maior; i++) {
+            contador++;
+            aux[i] = 0;
+        }
+
+        // Exemplo: altura 4 aparece 3 vezes, então aux[4] = 3
+        for (int i = 0; i < fim; i++) {
+            contador++;
+            aux[jogadores[i].getAltura()]++;
+        }
+
+        // Modificar o array auxiliar para que possa ser feito a colocação no JogadoresC
+        // Eu tambem to confuso mas é isso mesmo
+        for (int i = 1; i <= maior; i++) {
+            contador++;
+            aux[i] += aux[i - 1];
+        }
+
+        // AGORA A ORDENAÇÃO COMEÇA
+        // Vamo botar os elementos(a partir da ultima repetição dele) na posição ordenada dele no JogadoresC
+        // vou pegar a altura do primeiro jogador, depois vou ver em qual posição do
+        // auxiliar ele ta, e vou colocar esse jogador no JogadoresC, COM A POSIÇÃO DO AUXILIAR
+        for (int i = 0; i < fim; i++) {
+            contador++;
+            jogadoresC[aux[jogadores[i].getAltura()] - 1] = jogadores[i];
+            aux[jogadores[i].getAltura()]--;
+            moves++;
+        }
+
+        // Agora só vou trocar os elementos do Jogadores pelo JogadoresC, para ordenar
+        for (int i = 0; i < fim; i++) {
+            contador++;
+            jogadores[i] = jogadoresC[i];
+            moves++;
+        }
+
+        // Vou só colocar as alturas iguais em ordem alfabetica
+        alfabetica(fim, jogadores);
+
+        long endTime = System.nanoTime();// tempo de fim de execução
+        duration = (endTime - startTime);// tempo de execução
 
     }
 
     public static void main(String[] args) {
-
 
         Scanner scan = new Scanner(System.in);
         File tabela = new File("tmp/players.csv");
@@ -282,14 +283,13 @@ public class CountingJava {
 
         // Segunda parte - ordenar os Jogadoreses
 
-        heapsort(numeroJogadores, jocker);
+        countSort(numeroJogadores, jocker);
 
         // Printar os Jogadoreses ordenados
         for (int i = 0; i < numeroJogadores; i++) {
             System.out.println(jocker[i].dados());
         }
 
-       
         criarLog();
     }
 }
