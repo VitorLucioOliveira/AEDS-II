@@ -187,7 +187,7 @@ void imprime(int identificador, Jogador jogadores[])
 // cria um arquivo de log
 void criaLog()
 {
-    FILE *arq = fopen("tmp/810862_quicksort.txt", "w");
+    FILE *arq = fopen("/tmp/810862_quicksort.txt", "w");
     fprintf(arq, "810862\t%d\t%d \t%f", numeroC, numeroM * 3, tempoE);
     fclose(arq);
 }
@@ -199,7 +199,7 @@ int main()
     Jogador jogadores[3922];
     Jogador subJogadores[500];
     int numeroJogador = 0;
-    FILE *file = fopen("tmp/players.csv", "r");
+    FILE *file = fopen("/tmp/players.csv", "r");
     do
     {
         scanf("%s", id);

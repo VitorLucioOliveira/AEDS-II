@@ -25,20 +25,19 @@ void selecao(Jogador jogadores[], int tam, int i)
 
     if (i < tam)
     {
-        for (int j = i + 1; j < tam; j++)
+        for (int j = tam - 1; j > 0; j--)
         {
             numeroC++;
-            if (strcmp(jogadores[i].nome, jogadores[j].nome) > 0)
+            if (strcmp(jogadores[j].nome, jogadores[j-1].nome) < 0)
             {
 
-                Jogador aux = jogadores[i];
-                jogadores[i] = jogadores[j];
-                jogadores[j] = aux;
+                Jogador aux = jogadores[j];
+                jogadores[j] = jogadores[j-1];
+                jogadores[j-1] = aux;
                 numeroM++;
             }
-
-            selecao(jogadores, tam, i + 1);
         }
+        selecao(jogadores, tam, i + 1);
     }
 }
 
@@ -92,7 +91,7 @@ void split(char linha[], char substrings[8][100])
 void ler(Jogador jogadores[], FILE *file)
 {
 
-    char linha[200];
+    char linha[3921];
     int qtJogadores = -1; // inicializacao negativa para que a primeira linha seja ignorada
 
     while (fgets(linha, sizeof(linha), file) != NULL)
@@ -146,8 +145,8 @@ int main()
 {
     clock_t inicio, fim;
 
-    char id[50];
-    Jogador jogadores[3922];
+    char id[500];
+    Jogador jogadores[3921];
     Jogador subJogadores[500];
     int numeroJogador = 0;
     FILE *file = fopen("/tmp/players.csv", "r");
@@ -158,13 +157,16 @@ int main()
         {
             int identificador = atoi(id);
             ler(jogadores, file);
+
             subJogadores[numeroJogador] = jogadores[identificador];
             numeroJogador++;
         }
     } while ((strcmp(id, "FIM") != 0) && (strcmp(id, "fim") != 0));
     fclose(file);
     inicio = clock();
-    selecao(subJogadores, numeroJogador - 1, -1);
+  
+
+    selecao(subJogadores, numeroJogador, 0);
     fim = clock();
 
     for (int i = 0; i < numeroJogador; i++)
