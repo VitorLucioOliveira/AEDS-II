@@ -159,7 +159,7 @@ public class PesquisaSeguencial {
 
   // Criar log
   public static void criarLog(Long duration) {
-    String fileName = "810862_sequencial.txt";
+    String fileName = "/tmp/810862_sequencial.txt";
 
     try {
       File logFile = new File(fileName);

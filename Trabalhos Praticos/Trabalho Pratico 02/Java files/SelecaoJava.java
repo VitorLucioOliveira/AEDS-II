@@ -158,7 +158,7 @@ public class SelecaoJava {
 
   // Criar log
   public static void criarLog(Long duration) {
-    String fileName = "tmp/810862_seleção.txt";
+    String fileName = "/tmp/810862_seleção.txt";
 
     try {
       File logFile = new File(fileName);
@@ -198,7 +198,7 @@ public class SelecaoJava {
     ;// tempo de inicio de execução
 
     Scanner scan = new Scanner(System.in);
-    File tabela = new File("tmp/players.csv");
+    File tabela = new File("/tmp/players.csv");
 
     // variaveis e arrays inicializados
     Jogador[] jocker = new Jogador[500];

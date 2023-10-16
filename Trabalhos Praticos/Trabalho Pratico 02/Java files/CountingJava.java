@@ -159,7 +159,7 @@ public class CountingJava {
 
     // Criar log
     public static void criarLog() {
-        String fileName = "tmp/810862_countingsort.txt";
+        String fileName = "/tmp/810862_countingsort.txt";
 
         try {
             File logFile = new File(fileName);
@@ -262,7 +262,7 @@ public class CountingJava {
     public static void main(String[] args) {
 
         Scanner scan = new Scanner(System.in);
-        File tabela = new File("tmp/players.csv");
+        File tabela = new File("/tmp/players.csv");
 
         // variaveis e arrays inicializados
         Jogadores[] jocker = new Jogadores[3000];

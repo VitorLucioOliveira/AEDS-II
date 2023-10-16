@@ -159,7 +159,7 @@ public class HeapJava {
 
     // Criar log
     public static void criarLog() {
-        String fileName = "tmp/810862_heapsort.txt.";
+        String fileName = "/tmp/810862_heapsort.txt.";
 
         try {
             File logFile = new File(fileName);
@@ -261,7 +261,7 @@ public class HeapJava {
 
 
         Scanner scan = new Scanner(System.in);
-        File tabela = new File("tmp/players.csv");
+        File tabela = new File("/tmp/players.csv");
 
         // variaveis e arrays inicializados
         Jogadores[] jocker = new Jogadores[3000];
