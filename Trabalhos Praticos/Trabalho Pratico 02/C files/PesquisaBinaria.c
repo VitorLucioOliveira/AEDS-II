@@ -189,8 +189,9 @@ void criaLog()
 int main()
 {
     clock_t inicio, fim;
-    inicio = clock();
-    char id[50];
+    
+    char id[500];
+    
     Jogador jogadores[3922];
     Jogador subJogadores[500];
     int numeroJogador = 0;
@@ -198,6 +199,7 @@ int main()
     do
     {
         scanf("%s", id);
+       
         if (strcmp(id, "FIM") != 0 && strcmp(id, "fim") != 0    )
         {
             int identificador = atoi(id);
@@ -208,10 +210,11 @@ int main()
     } while (strcmp(id, "FIM") != 0 && strcmp(id, "fim") != 0   );
     fclose(file);
     selecao(subJogadores, numeroJogador);
-    char nome[50];
+    char nome[500];
     do
     {
         scanf(" %[^\r\n]%*c", nome);
+       
         if (strcmp(nome, "FIM") != 0 && strcmp(nome, "fim") != 0    )
         {
             if (pesquisaBinaria(subJogadores, nome, numeroJogador))
