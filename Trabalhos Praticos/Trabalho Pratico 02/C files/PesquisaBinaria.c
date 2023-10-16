@@ -195,7 +195,7 @@ int main()
     Jogador jogadores[3922];
     Jogador subJogadores[500];
     int numeroJogador = 0;
-    FILE *file = fopen("/tmp/players.csv", "r");
+    FILE *file = fopen("tmp/players.csv", "r");
     do
     {
         scanf("%s", id);
@@ -210,6 +210,12 @@ int main()
     } while (strcmp(id, "FIM") != 0 && strcmp(id, "fim") != 0   );
     fclose(file);
     selecao(subJogadores, numeroJogador);
+
+    for (size_t i = 0; i < numeroJogador; i++)
+    {
+       imprime(i, subJogadores);
+    }
+    
     char nome[500];
     do
     {
