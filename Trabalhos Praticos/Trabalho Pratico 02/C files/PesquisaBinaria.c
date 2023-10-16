@@ -182,7 +182,7 @@ void imprime(int identificador, Jogador jogadores[])
 // cria um arquivo de log
 void criaLog()
 {
-    FILE *arq = fopen("/tmp/810862_binaria.txt", "w");
+    FILE *arq = fopen("810862_binaria.txt", "w");
     fprintf(arq, "810862\t%d\t%d\t%lf", numeroC, numeroM * 3, tempoE);
     fclose(arq);
 }
@@ -192,7 +192,7 @@ int main()
     
     char id[500];
     
-    Jogador jogadores[500];
+    Jogador jogadores[3922];
     Jogador subJogadores[500];
     int numeroJogador = 0;
     FILE *file = fopen("/tmp/players.csv", "r");
@@ -210,12 +210,6 @@ int main()
     } while (strcmp(id, "FIM") != 0 && strcmp(id, "fim") != 0   );
     fclose(file);
     selecao(subJogadores, numeroJogador);
-
-    for (size_t i = 0; i < numeroJogador; i++)
-    {
-       imprime(i, subJogadores);
-    }
-    
     char nome[500];
     do
     {
