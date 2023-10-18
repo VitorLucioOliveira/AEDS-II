@@ -1,4 +1,7 @@
-class TP01Q14RecursivoAlgebraBooleanaEmJava {
+import java.io.*;
+
+
+class AlgebraBooleana{
    //função para substituir expressão
    public static String substituiExpressaoBoo(String palavra){    
       String novaPalavra="";
@@ -157,7 +160,7 @@ class TP01Q14RecursivoAlgebraBooleanaEmJava {
    }
 
    //MAIN
-   public static void main (String[] args){
+   public static void main(String[] args){
       String[] entrada = new String[1000];
       int numEntrada = 0;
       String novaPalavra, palavraAux;
