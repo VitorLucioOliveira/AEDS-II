@@ -251,7 +251,7 @@ public class HeapJava {
                 }
             }
         }
-
+ 
          long endTime = System.nanoTime();// tempo de fim de execução
            duration = (endTime - startTime);// tempo de execução
 

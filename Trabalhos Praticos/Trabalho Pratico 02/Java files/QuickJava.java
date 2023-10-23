@@ -161,12 +161,12 @@ public class QuickJava {
             while (jogadores[i].getEstadoNascimento().compareTo(pivo.getEstadoNascimento()) < 0) {
                 i++;
 
-            }
+            }// varre ate achar um nemero maior que o pivo
 
             while (jogadores[j].getEstadoNascimento().compareTo(pivo.getEstadoNascimento()) > 0) {
                 j--;
 
-            }
+            }// varre ate achar um numero menor que o pivo
 
             if (i <= j) {
 
@@ -176,16 +176,18 @@ public class QuickJava {
                 i++;
                 j--;
 
-            }
+            }// troca o numero maior da posição jogador[i] com o numero menor da posição jogador[j]
+             // ate trocar o menor da direita numero com o pivo
 
         }
 
         if (esq < j) {
-            doQuick(jogadores, esq, j);
+            doQuick(jogadores, esq, j);// faz com o array de menores ate chegar no pivo
         }
 
         if (i < dir) {
-            doQuick(jogadores, i, dir);
+            doQuick(jogadores, i, dir);// faz com o array de maiores ate chegar no fim
+
         }
     }
 

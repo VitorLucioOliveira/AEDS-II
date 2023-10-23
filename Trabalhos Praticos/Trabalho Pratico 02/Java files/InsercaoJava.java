@@ -171,7 +171,7 @@ public class InsercaoJava {
         }
     }
 
-    // pesquisa sequencial
+    
     public static void ordenar(int fim, Jogadores jocker[]) {
 
         for (int i = 0; i < fim; i++) {

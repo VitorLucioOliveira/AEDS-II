@@ -21,11 +21,11 @@ typedef struct Jogador
 
 void doShell(Jogador jogadores[], int tam, int pes, int gap)
 {
-    for (int i = (gap + pes); i < tam; i += gap)
+    for (int i = (gap + pes); i < tam; i += gap)// i= distancia entre os elementos a serem comparados, ou seja o ultimo do grupo
     {
         numeroC++;
         Jogador tmp = jogadores[i];
-        int j = i - gap;
+        int j = i - gap;// primeiro do grupo a ser comparado
         while ((j >= 0) && (jogadores[j].peso > tmp.peso))
         {
             numeroC++;
