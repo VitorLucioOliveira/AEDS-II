@@ -4,6 +4,8 @@
 #include <time.h>
 #include <stdlib.h>
 #define MAXTAM 500
+#define MAX_ATTRIBUTES 8
+#define MAX_LEN 100 
 
 typedef struct Jogador
 {
@@ -17,7 +19,13 @@ typedef struct Jogador
     char estadoNascimento[50];
 } Jogador;
 
-// metodo para dividir a string linha em substrings entre as virgulas
+// metodos para dividir a string
+
+typedef struct Split {
+	char linha[MAX_ATTRIBUTES][MAX_LEN];
+} Split;
+
+
 void split(char linha[], char substrings[8][100])
 {
     int qtSubstrings = 0;
@@ -63,21 +71,17 @@ void split(char linha[], char substrings[8][100])
     }
 }
 
-void splitC(char linha[], char comandos[3][10])
-{
-    int i = 0;
-    char *delimitador = " "; // O espaço em branco é o delimitador
+Split SplitSpace(){//pede e divide por espaços
 
-    char *token = strtok(linha, delimitador);
+    Split Split;
 
-    while (token != NULL && i < 10)
-    {
-        // Copie o elemento de token para a posição do array
-        strcpy(comandos[i], token);
-
-        token = strtok(NULL, delimitador);
-        i++;
+    for(int i=0; i<3; i++){
+        scanf("%[^ \n]", Split.linha[i]);   
+        if(getchar() == '\n') i=3;  
     }
+
+    return Split;
+
 }
 
 // metodo para realizar a leitura de um arquivo e guardar as informacoes em um array de jogadores
@@ -141,6 +145,7 @@ typedef struct Lista
     Jogador (*Remover)(struct Lista *, int pos);
 
     void (*Mostrar)(struct Lista *);
+    void (*MostrarR)(struct Lista *);
     void (*Close)(struct Lista *);
 
 } Lista;
@@ -155,7 +160,7 @@ void InserirInicioListaLinear(Lista *lista, Jogador x)
         exit(1);
     }
 
-    for (int i = lista->size; i < 0; i--)
+    for (int i = lista->size; i > 0; i--)
     {
         lista->array[i] = lista->array[i - 1];
     }
@@ -262,6 +267,16 @@ void MostrarListaLinear(Lista *lista)
     }
 }
 
+void MostrarRListaLinear(Lista *lista)
+{
+
+    for (int i = 0; i < lista->size; i++)
+    {
+        printf("(R) %s\n", lista->array[i].nome);
+        
+    }
+}
+
 void CloseListaLinear(Lista *lista)
 {
     free(lista->array);
@@ -273,7 +288,7 @@ Lista newLista()
     Lista lista;
 
     lista.size = 0;
-    lista.array = (Jogador *)malloc(500 * sizeof(Jogador));
+    lista.array = (Jogador *)malloc(MAXTAM * sizeof(Jogador));
 
     lista.InserirInicio = InserirInicioListaLinear;
     lista.InserirFim = InserirFimListaLinear;
@@ -283,55 +298,57 @@ Lista newLista()
     lista.RemoverFim = RemoverFimListaLinear;
     lista.Remover = RemoverListaLinear;
 
+    lista.MostrarR = MostrarRListaLinear;
     lista.Mostrar = MostrarListaLinear;
     lista.Close = CloseListaLinear;
 
     return lista;
 }
 
-void doComando(Lista *lista, char comando[3][10], Jogador jogadores[])
+void doComando(Lista *lista, Jogador jogadores[], Lista* removidos)
 {
-    // Inicialize uma variável para armazenar o valor convertido de comando[1]
     
-
+    
+    Split split = SplitSpace();
+    
+    
     // inserir
-    if (strcmp(comando[0], "II") == 0)
+    if (strcmp(split.linha[0], "II") == 0)
     {
-         int valor = atoi(comando[1]);
-         Jogador x = jogadores[valor];
-        InserirInicioListaLinear(&lista, x);
+        int valor = atoi(split.linha[1]);
+
+        lista->InserirInicio(lista, jogadores[valor]);
     }
 
-    if (strcmp(comando[0], "IF") == 0)
-    {   
-        int valor = atoi(comando[1]);
-         Jogador x = jogadores[valor];
-        InserirFimListaLinear(&lista, x);
+    if (strcmp(split.linha[0], "IF") == 0)
+    {
+        int valor = atoi(split.linha[1]);
+
+        lista->InserirFim(lista, jogadores[valor]);
     }
 
-    if (strcmp(comando[0], "I*") == 0)
+    if (strcmp(split.linha[0], "I*") == 0)
     {
-         int valor = atoi(comando[2]);
-         Jogador x = jogadores[valor];
-         int id = atoi(comando[1]);
-        InserirListaLinear(&lista, x, id);
+        int valor = atoi(split.linha[2]);
+        int id = atoi(split.linha[1]);
+        lista->Inserir(lista, jogadores[valor], id);
     }
 
     // remover
-    if (strcmp(comando[0], "RI") == 0)
+    if (strcmp(split.linha[0], "RI") == 0)
     {
-        printf("(R) %s \n", RemoverInicioListaLinear(&lista).nome);
+        removidos->InserirFim(removidos, lista->RemoverInicio(lista));
     }
 
-    if (strcmp(comando[0], "RF") == 0)
+    if (strcmp(split.linha[0], "RF") == 0)
     {
-        printf("(R) %s \n", RemoverFimListaLinear(&lista).nome);
+        removidos->InserirFim(removidos, lista->RemoverFim(lista));
     }
 
-    if (strcmp(comando[0], "R*") == 0)
+    if (strcmp(split.linha[0], "R*") == 0)
     {
-        int id = atoi(comando[1]);
-        printf("(R) %s \n", RemoverListaLinear(&lista, id).nome);
+        int id = atoi(split.linha[1]);
+        removidos->InserirFim(removidos, lista->Remover(lista,id));
     }
 }
 
@@ -342,7 +359,7 @@ int main()
     Jogador jogadores[3922];
     Lista lista = newLista();
 
-    FILE *file = fopen("tmp/players.csv", "r");
+    FILE *file = fopen("/tmp/players.csv", "r");
     do
     {
         scanf("%s", id);
@@ -350,28 +367,28 @@ int main()
         {
             int identificador = atoi(id);
             ler(jogadores, file);
-            InserirFimListaLinear(&lista, jogadores[identificador]);
+            lista.InserirFim(&lista, jogadores[identificador]);
         }
     } while ((strcmp(id, "FIM") != 0) && (strcmp(id, "fim") != 0));
 
-    // Ler comandos da entrada padrao
-    int pedido;
-    scanf("%i", &pedido);
-    char comandos[3][10];
-
-    while (pedido > 0)
-    {
-        char linha[10];
-        scanf("%s", linha);
-        
-        splitC(linha, comandos);
-
-        doComando(&lista, comandos, jogadores);
-        pedido--;
-    }
-
     fclose(file);
 
-    MostrarListaLinear(&lista);
-    CloseListaLinear(&lista);
+    /* A seguir  tem a funcionalidade de realizar os comandos pedidos */
+   
+    
+    Lista removidos = newLista();//lista para guardar os removidos
+    
+    int action; scanf("%i", &action); // numero de acoes a serem realizadas
+
+    for (int i = 0; i <=action; i++)// repedição para realizar as acoes
+    {
+        doComando(&lista, jogadores, &removidos);// realiza os commandos e insere na lista de removidos
+    }
+    
+
+    //imprime os resultados
+    removidos.MostrarR(&removidos);
+    lista.Mostrar(&lista);
+    lista.Close(&lista);
+    removidos.Close(&removidos);
 }
