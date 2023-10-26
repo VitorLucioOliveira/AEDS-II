@@ -3,7 +3,7 @@
 #include <string.h>
 #include <time.h>
 #include <stdlib.h>
-#define MAXTAM 1000
+#define MAXTAM 500
 
 typedef struct Jogador
 {
@@ -63,6 +63,23 @@ void split(char linha[], char substrings[8][100])
     }
 }
 
+void splitC(char linha[], char comandos[3][10])
+{
+    int i = 0;
+    char *delimitador = " "; // O espaço em branco é o delimitador
+
+    char *token = strtok(linha, delimitador);
+
+    while (token != NULL && i < 10)
+    {
+        // Copie o elemento de token para a posição do array
+        strcpy(comandos[i], token);
+
+        token = strtok(NULL, delimitador);
+        i++;
+    }
+}
+
 // metodo para realizar a leitura de um arquivo e guardar as informacoes em um array de jogadores
 void ler(Jogador jogadores[], FILE *file)
 {
@@ -97,10 +114,9 @@ void ler(Jogador jogadores[], FILE *file)
     }
 }
 
-void imprime( Jogador jogadores)
+void imprime(Jogador jogadores)
 {
-    printf("[%d ## %s ## %d ## %d ## %d ## %s ## %s ## %s]\n",
-           jogadores.id,
+    printf(" ## %s ## %d ## %d ## %d ## %s ## %s ## %s ##\n",
            jogadores.nome,
            jogadores.altura,
            jogadores.peso,
@@ -113,134 +129,210 @@ void imprime( Jogador jogadores)
 // CLASSE LISTA
 typedef struct Lista
 {
-    Jogador array[MAXTAM];
-    int n;
+    Jogador *array;
+    int size;
+
+    void (*InserirInicio)(struct Lista *, Jogador x);
+    void (*InserirFim)(struct Lista *, Jogador x);
+    void (*Inserir)(struct Lista *, Jogador x, int pos);
+
+    Jogador (*RemoverInicio)(struct Lista *);
+    Jogador (*RemoverFim)(struct Lista *);
+    Jogador (*Remover)(struct Lista *, int pos);
+
+    void (*Mostrar)(struct Lista *);
+    void (*Close)(struct Lista *);
+
 } Lista;
 
-void start(Lista lista)
+// INSERIR NA LISTA
+void InserirInicioListaLinear(Lista *lista, Jogador x)
 {
-    lista.n = 0;
+
+    if (lista->size >= MAXTAM)
+    {
+        printf("Erro ao inserir no inicio!");
+        exit(1);
+    }
+
+    for (int i = lista->size; i < 0; i--)
+    {
+        lista->array[i] = lista->array[i - 1];
+    }
+
+    lista->array[0] = x;
+    lista->size++;
 }
 
-void inserirInicio(Lista lista, Jogador x)
+void InserirFimListaLinear(Lista *lista, Jogador x)
 {
 
-    if (lista.n >= MAXTAM)
+    // validar insercao
+    if (lista->size >= MAXTAM)
     {
         printf("Erro ao inserir!");
         exit(1);
     }
 
-    for (int i = lista.n; i > 0; i--)
-    {
-        lista.array[i] = lista.array[i - 1];
-    }
-
-    lista.array[0] = x;
-    lista.n++;
+    lista->array[lista->size] = x;
+    lista->size++;
 }
 
-void inserirFim(Lista lista,Jogador x)
+void InserirListaLinear(Lista *lista, Jogador x, int pos)
 {
 
     // validar insercao
-    if (lista.n >= MAXTAM)
-    {
-        printf("Erro ao inserir!");
-        exit(1);
-    }
-
-    lista.array[lista.n] = x;
-    lista.n++;
-}
-
-
-void inserir(Lista lista, Jogador x, int pos)
-{
-    
-
-    // validar insercao
-    if (lista.n >= MAXTAM || pos < 0 || pos > lista.n)
+    if (lista->size >= MAXTAM || pos < 0 || pos > lista->size)
     {
         printf("Erro ao inserir!");
         exit(1);
     }
 
     // levar elementos para o fim do lista.array
-    for (int i = lista.n; i > pos; i--)
+    for (int i = lista->size; i > pos; i--)
     {
-        lista.array[i] = lista.array[i - 1];
+        lista->array[i] = lista->array[i - 1];
     }
 
-    lista.array[pos] = x;
-    lista.n++;
+    lista->array[pos] = x;
+    lista->size++;
 }
 
-Jogador removerInicio(Lista lista)
+// REMOVER DA LISTA
+Jogador RemoverInicioListaLinear(Lista *lista)
 {
-    Jogador resp;
-
     // validar remocao
-    if (lista.n == 0)
+    if (lista->size == 0)
     {
         printf("Erro ao remover!");
         exit(1);
     }
 
-    resp = lista.array[0];
-    lista.n--;
+    Jogador removido = lista->array[0];
 
-    for (int i = 0; i < lista.n; i++)
+    for (int i = 0; i < lista->size; i++)
     {
-        lista.array[i] = lista.array[i + 1];
+        lista->array[i] = lista->array[i + 1];
     }
 
-    return resp;
+    lista->size--;
+    return removido;
 }
 
-/**
- * Remove um elemento da ultima posicao da
- * @return resp int elemento a ser removido.
- */
-Jogador removerFim(Lista lista)
+Jogador RemoverFimListaLinear(Lista *lista)
 {
 
     // validar remocao
-    if (lista.n == 0)
+    if (lista->size == 0)
     {
         printf("Erro ao remover!");
         exit(1);
     }
 
-    return lista.array[--lista.n];
+    return lista->array[--lista->size];
 }
 
-/**
- * Remove um elemento de uma posicao especifica da lista e
- * movimenta os demais elementos para o inicio da mesma.
- * @param pos Posicao de remocao.
- * @return resp int elemento a ser removido.
- */
-Jogador remover(Lista lista,int pos)
+Jogador RemoverListaLinear(Lista *lista, int pos)
 {
-    Jogador resp;
-
     // validar remocao
-    if (lista.n == 0 || pos < 0 || pos >= lista.n)
+    if (lista->size == 0 || pos < 0 || pos >= lista->size)
     {
         printf("Erro ao remover!");
         exit(1);
     }
 
-    resp = lista.array[pos];
-    lista.n--;
+    Jogador removido = lista->array[pos];
 
-    for (int i = pos; i < lista.n; i++)
+    for (int i = pos; i < lista->size; i++)
     {
-        lista.array[i] = lista.array[i + 1];
+        lista->array[i] = lista->array[i + 1];
     }
 
-    return resp;
+    lista->size--;
+    return removido;
+}
+
+void MostrarListaLinear(Lista *lista)
+{
+
+    for (int i = 0; i < lista->size; i++)
+    {
+        printf("[%i]", i);
+        imprime(lista->array[i]);
+    }
+}
+
+void CloseListaLinear(Lista *lista)
+{
+    free(lista->array);
+}
+
+Lista newLista()
+{
+
+    Lista lista;
+
+    lista.size = 0;
+    lista.array = (Jogador *)malloc(500 * sizeof(Jogador));
+
+    lista.InserirInicio = InserirInicioListaLinear;
+    lista.InserirFim = InserirFimListaLinear;
+    lista.Inserir = InserirListaLinear;
+
+    lista.RemoverInicio = RemoverInicioListaLinear;
+    lista.RemoverFim = RemoverFimListaLinear;
+    lista.Remover = RemoverListaLinear;
+
+    lista.Mostrar = MostrarListaLinear;
+    lista.Close = CloseListaLinear;
+
+    return lista;
+}
+
+void doComando(Lista *lista, char comando[3][10], Jogador jogadores[])
+{
+    // Inicialize uma variável para armazenar o valor convertido de comando[1]
+    
+
+    // inserir
+    if (strcmp(comando[0], "II") == 0)
+    {
+         int valor = atoi(comando[1]);
+         Jogador x = jogadores[valor];
+        InserirInicioListaLinear(&lista, x);
+    }
+
+    if (strcmp(comando[0], "IF") == 0)
+    {   
+        int valor = atoi(comando[1]);
+         Jogador x = jogadores[valor];
+        InserirFimListaLinear(&lista, x);
+    }
+
+    if (strcmp(comando[0], "I*") == 0)
+    {
+         int valor = atoi(comando[2]);
+         Jogador x = jogadores[valor];
+         int id = atoi(comando[1]);
+        InserirListaLinear(&lista, x, id);
+    }
+
+    // remover
+    if (strcmp(comando[0], "RI") == 0)
+    {
+        printf("(R) %s \n", RemoverInicioListaLinear(&lista).nome);
+    }
+
+    if (strcmp(comando[0], "RF") == 0)
+    {
+        printf("(R) %s \n", RemoverFimListaLinear(&lista).nome);
+    }
+
+    if (strcmp(comando[0], "R*") == 0)
+    {
+        int id = atoi(comando[1]);
+        printf("(R) %s \n", RemoverListaLinear(&lista, id).nome);
+    }
 }
 
 int main()
@@ -248,8 +340,8 @@ int main()
 
     char id[50];
     Jogador jogadores[3922];
-    Lista lista;
-    int numeroJogador = 0;
+    Lista lista = newLista();
+
     FILE *file = fopen("tmp/players.csv", "r");
     do
     {
@@ -258,15 +350,28 @@ int main()
         {
             int identificador = atoi(id);
             ler(jogadores, file);
-            lista.array[numeroJogador] = jogadores[identificador];
-            numeroJogador++;
+            InserirFimListaLinear(&lista, jogadores[identificador]);
         }
     } while ((strcmp(id, "FIM") != 0) && (strcmp(id, "fim") != 0));
-    fclose(file);
 
-    for (int i = 0; i < numeroJogador; i++)
+    // Ler comandos da entrada padrao
+    int pedido;
+    scanf("%i", &pedido);
+    char comandos[3][10];
+
+    while (pedido > 0)
     {
-        imprime(lista.array[i]);
+        char linha[10];
+        scanf("%s", linha);
+        
+        splitC(linha, comandos);
+
+        doComando(&lista, comandos, jogadores);
+        pedido--;
     }
 
+    fclose(file);
+
+    MostrarListaLinear(&lista);
+    CloseListaLinear(&lista);
 }
