@@ -259,7 +259,7 @@ class Lista {
 }
 
 // MAIN
-public class AlocacaoSequencial {
+public class ListaSequencial {
 
     // Realiza os comandos pedidos 
     static public void doComando(String[] comando, Lista lista, File tabela) throws Exception
