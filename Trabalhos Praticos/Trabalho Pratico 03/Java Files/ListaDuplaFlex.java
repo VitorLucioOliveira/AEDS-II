@@ -207,14 +207,16 @@ class ListaDupla {
 
         /*
          * Cria uma celula no ultimo.prox, que antes era nulo, depois aponta o
-         * ultimo.prox.ant, para o ultimo, ligando elas e depois substitui
-         */
-        /* ultimo--->null */
-        /* ultimo--->ultimo.prox--->null */
+         * ultimo.prox.ant, para o ultimo, ligando elas e depois substitui o ultimo
+         
+         * ultimo--->null 
 
-        /* ultimo.prox.ant=ultimo<---ultimo.prox---->null */
+         * ultimo--->ultimo.prox--->null 
 
-        /* ultimo.ant--->ultimo(ultimo.prox)---->ultimo--->null */
+         * ultimo.prox.ant=ultimo<---ultimo.prox---->null 
+
+         * ultimo.ant--->ultimo(ultimo.prox)---->ultimo--->null
+        */
 
         ultimo.prox = new CelulaDupla(jogador);
         ultimo.prox.ant = ultimo;
@@ -381,9 +383,9 @@ class ListaDupla {
 
     public static void doQuick(CelulaDupla esq, CelulaDupla dir) {
         if (esq != null && dir != null && esq != dir && esq.ant != dir) {
-            CelulaDupla pivot = pivo(esq, dir);
-            doQuick(esq, pivot.ant);
-            doQuick(pivot.prox, dir);
+            CelulaDupla pivo = pivo(esq, dir);
+            doQuick(esq, pivo.ant);
+            doQuick(pivo.prox, dir);
         }
     }
 
