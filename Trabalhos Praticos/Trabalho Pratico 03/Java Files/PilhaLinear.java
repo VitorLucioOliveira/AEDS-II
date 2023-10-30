@@ -2,7 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-// classe jogador
+//------------------------CLASSE JOGADOR---------------------------------//
 class Jogador {
 
     // instancias
@@ -146,7 +146,7 @@ class Jogador {
     }
 }
 
-// classe Pilha
+//-------------------------CLASSE PILHA----------------------------------//
 class Pilha {
 
     private Jogador[] array;
@@ -196,8 +196,8 @@ class Pilha {
 
 }
 
-// MAIN
-public class PilhaSequencial {
+//------------------------- MAIN ----------------------------------//
+public class PilhaLinear {
 
     // Realiza os comandos pedidos
     static public void doComando(String[] comando, Pilha pilha, File tabela) throws Exception {
