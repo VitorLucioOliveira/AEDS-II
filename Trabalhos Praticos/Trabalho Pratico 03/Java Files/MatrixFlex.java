@@ -1,22 +1,22 @@
 
 
 
-// ------------------------CLASSE CELULA----------------------------------//
-class Celula {
+// ------------------------CLASSE CelulaMatriz----------------------------------//
+class CelulaMatriz {
 
-    public int elemento; // Elemento inserido na celula.
-    public Celula sup, inf, esq, dir; // Aponta a celula prox.
+    public int elemento; // Elemento inserido na CelulaMatriz.
+    public CelulaMatriz sup, inf, esq, dir; // Aponta a CelulaMatriz prox.
 
-    public Celula() {
+    public CelulaMatriz() {
         this(0);
     }
 
-    public Celula(int elemento) {
+    public CelulaMatriz(int elemento) {
         this.elemento = elemento;
         this.inf = this.sup = this.dir = this.esq = null;
     }
 
-    public Celula(int elemento, Celula inf, Celula sup, Celula esq, Celula dir) {
+    public CelulaMatriz(int elemento, CelulaMatriz inf, CelulaMatriz sup, CelulaMatriz esq, CelulaMatriz dir) {
         this.elemento = elemento;
         this.inf = inf;
         this.sup = sup;
@@ -28,7 +28,7 @@ class Celula {
 // ------------------------CLASSE MATRIZ FLEXIVEL--------------------------//
 
 class Matrix {
-    private Celula inicio;
+    private CelulaMatriz inicio;
     private int linha, coluna;
 
     public Matrix() {
@@ -45,8 +45,8 @@ class Matrix {
     public int SomaMatrix(Matrix matrix)
     {
         int soma = 0;
-        Celula i = matrix.inicio;
-        Celula j = matrix.inicio;
+        CelulaMatriz i = matrix.inicio;
+        CelulaMatriz j = matrix.inicio;
         for (int l = 0; l < matrix.linha; l++)
         {
             for (int c = 0; c < matrix.coluna; c++)
