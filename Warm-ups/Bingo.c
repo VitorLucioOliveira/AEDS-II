@@ -36,7 +36,7 @@ bool venceu(int **cartelas, int linhas, int colunas)
 
         if (contador == colunas)
         {
-            printf("%i", i + 1);
+            printf("%i ", i + 1);
             venceu = true;
         }
         contador = 0;
