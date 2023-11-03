@@ -49,9 +49,8 @@ public class FilaRecreio {
         Scanner scan = new Scanner(System.in);
 
         /*
-         * variável N: número de testes
-         * variável M: número de alunos na fila
-         * variável fila: vetor que armazena a nota dos alunos
+         * variável alunos: número de alunos na fila
+         * variável notas: vetor que armazena a nota dos alunos
          */
 
         int casos = scan.nextInt();
@@ -60,7 +59,7 @@ public class FilaRecreio {
             int alunos = scan.nextInt();
             int[] notas = new int[alunos];
 
-            // preenche o vetor fila
+            // preenche o vetor notas
             for (int j = 0; j < alunos; j++) {
                 notas[j] = scan.nextInt();
             }

@@ -243,10 +243,10 @@ class ListaFlexivel {
 
         if(primeiro == ultimo){System.err.println("Erro ao remover no inicio");}
 
-        Celula tmp = primeiro;// salva o primeiro elemento
-        primeiro = primeiro.prox;// primeiro agora é o proximo elemento
+        Celula tmp = primeiro.prox;// salva o primeiro elemento
+        primeiro.prox = tmp.prox;// primeiro agora é o proximo elemento
 
-        Jogador removido = primeiro.elemento;// salva o elemento removido
+        Jogador removido = tmp.elemento;// salva o elemento removido
 
         /*limpa a variaveis */
         tmp.prox = null;

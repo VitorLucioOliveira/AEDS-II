@@ -193,7 +193,6 @@ void InserirFimFilaCircular(Fila *fila, Jogador x)
     {
         fila->Remover(fila);
     }
-   
     
         fila->ultimo->prox = novaCelula(x);
         fila->ultimo = fila->ultimo->prox;
