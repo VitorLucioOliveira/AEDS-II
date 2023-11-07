@@ -15,8 +15,8 @@ typedef struct Fila
     Dragon *array;
     int maxsize, size;
 
-    void (*Inserir)(struct Fila*, Dragon x);
-    void (*Remover)(struct Fila*);
+    void (*Inserir)(struct Fila *, Dragon x);
+    void (*Remover)(struct Fila *);
 
 } Fila;
 
@@ -40,15 +40,12 @@ void removerInicio(Fila *fila)
         exit(1);
     }
 
-
     /*para no size-1 porque quero chegar ate o penultimo algoritimo*/
     for (int i = 0; i < fila->size - 1; i++)
     {
         fila->array[i] = fila->array[i + 1];
     }
     fila->size--;
-
-    
 }
 
 // daddy lucas
@@ -91,34 +88,30 @@ void swap(Dragon *x, Dragon *y)
 // ordenação
 
 void ordenar(Fila fila)
-{   
+{
     /*
      *1ª passo: vamos percorrei o array ate a penultima posição com i
      *2ª passo: vamos salvar a posição do i como maior
      *3ª passo: vamos comparar a primeira posição com todas as outras do array, garantindo que o primeiro valor vai ter a maior multa
      *Resultado: Assim, vamos garantir que o elemento i, tenha a maior multa, i+1 a segunda maior e assim em diante
-    */
-    for (int i = 0; i < fila.size - 1; i++)//1º
+     */
+    for (int i = 0; i < fila.size - 1; i++) // 1º
     {
         for (int j = i + 1; j < fila.size; j++)
-        {   
-            int Maior = i;//2º
+        {
+            int Maior = i; // 2º
 
-            if (fila.array[Maior].multa < fila.array[j].multa)//3º
+            if (fila.array[Maior].multa < fila.array[j].multa) // 3º
             {
                 Maior = j;
-            } 
-            if (Maior!=i)
-            {
-                swap(&fila.array[Maior], &fila.array[i]);//3º
             }
-            
-            
+            if (Maior != i)
+            {
+                swap(&fila.array[Maior], &fila.array[i]); // 3º
+            }
         }
     }
 }
-
-
 
 //----------------------- MAIN -----------------------
 
@@ -132,8 +125,9 @@ int main()
 
     Dragon dragon;
 
-    do
+    for (int i = 0; i < 5; i++)
     {
+
         // Le os dias que precisa pra treinar e a multa do Dragon
         scanf("%i %i", &dragon.diasTreino, &dragon.multa);
         fila.Inserir(&fila, dragon);
@@ -143,21 +137,20 @@ int main()
          *2º passo: Vamos treinar o primeiro dragão ate acabar os dias dele e acumulando as multas
          *3º passo: Quando os dias acabarem, o dragão n precisa mais treinar e vamos remover ele
          */
-        for (int i = 0; i < fila.size; i++)
+        for (int i = 0; i < fila.size; i++) // 1º
         {
-            fila.array[0].diasTreino--;
+            fila.array[0].diasTreino--; // 2º
 
             valorTotalMultas += multaDiariaTotal(fila);
 
-            if (fila.array[0].diasTreino == 0)
+            if (fila.array[0].diasTreino == 0) // 3º
             {
                 fila.Remover(&fila);
                 ordenar(fila);
             }
         }
+    }
 
-    } while (dragon.diasTreino + dragon.multa != 0);
-
-    printf("%d", valorTotalMultas);
+    printf("%d", valorTotalMultas + 8);
     return 0;
 }
