@@ -1,4 +1,5 @@
 import java.io.*;
+import classes.MyIO;
 
 
 class AlgebraBooleana{
