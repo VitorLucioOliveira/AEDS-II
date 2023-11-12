@@ -57,11 +57,16 @@ public class Questao1 {
         int contador = 0;
 
         if(raiz != null){
-        int length = raiz.palavra.length()-1;
-        contador += contarUltimo(raiz.esq, ultimo);
+       
+            int length = raiz.palavra.length()-1;
         
+        //vai na menor raiz da esquerda 
+        contador += contarUltimo(raiz.esq, ultimo);
+       
+        //incrementa 1 se a ultima letra da palavra for igual a ultima letra da palavra
         if(raiz.palavra.charAt(length) == ultimo){contador++;}
-
+        
+        //vai a menor raiz da direita
         contador += contarUltimo(raiz.dir, ultimo);
         }
 

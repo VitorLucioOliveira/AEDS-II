@@ -119,7 +119,8 @@ public class ArvoreBinaria {
             if (j.dir == null) {// 1
                 i.elemento = j.elemento;
                 j = j.esq;
-            } else {// 2
+            } 
+            else {// 2
                 j.dir = maiorEsq(i, j.dir);
             }
 
