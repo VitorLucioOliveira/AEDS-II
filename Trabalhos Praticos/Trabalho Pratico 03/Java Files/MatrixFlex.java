@@ -232,7 +232,8 @@ class Matriz {
 
                 }
             }
-        } else {
+        } 
+        else {
             System.out.println("Matrizes Desiguais");
         }
 

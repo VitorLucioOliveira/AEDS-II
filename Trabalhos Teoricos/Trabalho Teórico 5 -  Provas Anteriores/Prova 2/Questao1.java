@@ -1,4 +1,4 @@
-public class Questao1 {
+public class Questao1 {// analize de complexidade = O(h)-pesquisa na arvore + O(n)-pesquisa na lista
 
     public int contarPalavra(char primeiro, char ultimo) throws Exception {
 
@@ -58,7 +58,7 @@ public class Questao1 {
 
         if(raiz != null){
        
-            int length = raiz.palavra.length()-1;
+         int length = raiz.palavra.length()-1;
         
         //vai na menor raiz da esquerda 
         contador += contarUltimo(raiz.esq, ultimo);
