@@ -282,9 +282,9 @@ public class MatrixFlex {
 
         Scanner scan = new Scanner(System.in);
 
-        int numCasos = scan.nextInt() * 2;
+        int numCasos = scan.nextInt();
 
-        Matriz[] casos = new Matriz[numCasos];
+        Matriz[] casos = new Matriz[numCasos * 2];
 
 
         //preencher array de matrizes
@@ -309,7 +309,7 @@ public class MatrixFlex {
         }
 
         //MOSTRAR MATRIZES E OPERAÇÕES
-        for (int i = 0; i < numCasos; i=i+2) {
+        for (int i = 0; i < numCasos*2; i+=2) {
             
         
         casos[i].mostrarDiagonalMatriz();
