@@ -52,7 +52,18 @@ class Jogador {
         }
     }
 
-    public Jogador() {
+    public Jogador(String nome) {
+        
+        this.nome = nome;
+        this.altura = 0;
+        this.anoNascimento = 0;
+        this.cidadeNascimento= "0";
+        this.estadoNascimento= "0";
+        this.id =0;
+        this.peso= 0;
+        this.universidade= "0";
+
+
     }
 
     // funções set
@@ -171,6 +182,51 @@ class ArvoreBi {
         raiz = null;
     }
 
+        // MAIOR e MENOR NO
+
+    public Jogador getMaior() {
+        Jogador tmp = null;
+
+        if (raiz != null) {
+            No i;
+            for (i = raiz; i.dir != null; i = i.dir)
+                ;
+            tmp = i.elemento;
+        }
+
+        return tmp;
+    }
+
+    public Jogador getMenor() {
+        Jogador tmp = null;
+
+        if (raiz != null) {
+            No i;
+            for (i = raiz; i.esq != null; i = i.esq)
+                ;
+            tmp = i.elemento;
+        }
+
+        return tmp;
+    }
+
+    // ALTURA
+    public int getAltura() {
+        return getAltura(raiz, 0);
+    }
+
+    public int getAltura(No i, int altura) {
+        if (i == null) {
+            altura--;
+        } else {
+            int alturaEsq = getAltura(i.esq, altura + 1);
+            int alturaDir = getAltura(i.dir, altura + 1);
+            altura = (alturaEsq > alturaDir) ? alturaEsq : alturaDir;
+        }
+        return altura;
+    }
+
+
     // INSERIR
     public void inserir(Jogador jogador) throws Exception {
         raiz = inserir(jogador, raiz);
@@ -256,9 +312,18 @@ class ArvoreBi {
     }
 
     // PESQUISAR
-    public boolean pesquisar(Jogador jogador) {
-        return pesquisar(jogador, raiz);
-    }
+    public void pesquisar(Jogador jogador) {
+        System.out.print(" raiz");
+        if( pesquisar(jogador, raiz))
+        {
+           
+            System.out.println(" SIM");
+        }
+        else {
+            System.out.println(" NAO");
+        }
+        }
+    
 
     private boolean pesquisar(Jogador jogador, No i) {
         /*
@@ -276,14 +341,18 @@ class ArvoreBi {
         {
             resp = true;
         } else if (jogador.getNome().compareTo(i.elemento.getNome()) < 0) // 3º
-        {
+        {   System.out.print(" esq");
             resp = pesquisar(jogador, i.esq);
         } else// 4º
-        {
+        {   
+            System.out.print(" dir");
             resp = pesquisar(jogador, i.dir);
         }
+
         return resp;
     }
+
+    
 
     // MOSTRAR-CAMINHAR
     public void mostrar() {
@@ -304,49 +373,7 @@ class ArvoreBi {
         }
     }
 
-    // MAIOR e MENOR NO
 
-    public Jogador getMaior() {
-        Jogador tmp = null;
-
-        if (raiz != null) {
-            No i;
-            for (i = raiz; i.dir != null; i = i.dir)
-                ;
-            tmp = i.elemento;
-        }
-
-        return tmp;
-    }
-
-    public Jogador getMenor() {
-        Jogador tmp = null;
-
-        if (raiz != null) {
-            No i;
-            for (i = raiz; i.esq != null; i = i.esq)
-                ;
-            tmp = i.elemento;
-        }
-
-        return tmp;
-    }
-
-    // ALTURA
-    public int getAltura() {
-        return getAltura(raiz, 0);
-    }
-
-    public int getAltura(No i, int altura) {
-        if (i == null) {
-            altura--;
-        } else {
-            int alturaEsq = getAltura(i.esq, altura + 1);
-            int alturaDir = getAltura(i.dir, altura + 1);
-            altura = (alturaEsq > alturaDir) ? alturaEsq : alturaDir;
-        }
-        return altura;
-    }
 
 }
 
@@ -360,16 +387,22 @@ public class ArvoreBinaria {
         ArvoreBi arvore = new ArvoreBi();
 
 
-        /*Leitura do jogador e incerção na Lista */
+        /*Leitura do jogador e incerção na Arvore */
         String pedido = scan.nextLine();
         while (!pedido.equalsIgnoreCase("FIM")) {
             Jogador player = new Jogador(pedido, tabela); // cria um jogador novo e leva o pedido para o construtor
-            arvore.inserir(player);// inserir o jogador na lista
+            arvore.inserir(player);// inserir o jogador na Arvore
             pedido = scan.nextLine();
         }
 
-        arvore.mostrar();
-
+        pedido = scan.nextLine();
+        while (!pedido.equalsIgnoreCase("FIM")) {
+            Jogador player = new Jogador(pedido);
+            System.out.print(player.getNome());
+            arvore.pesquisar(player);
+           
+            pedido = scan.nextLine();
+        }
         scan.close();
     }
 }
