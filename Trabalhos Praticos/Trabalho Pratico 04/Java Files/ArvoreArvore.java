@@ -53,16 +53,15 @@ class Jogador {
     }
 
     public Jogador(String nome) {
-        
+
         this.nome = nome;
         this.altura = 0;
         this.anoNascimento = 0;
-        this.cidadeNascimento= "0";
-        this.estadoNascimento= "0";
-        this.id =0;
-        this.peso= 0;
-        this.universidade= "0";
-
+        this.cidadeNascimento = "0";
+        this.estadoNascimento = "0";
+        this.id = 0;
+        this.peso = 0;
+        this.universidade = "0";
 
     }
 
@@ -156,9 +155,8 @@ class Jogador {
                 " ##");
     }
 
-    public int getMod()
-    {
-        return(this.altura%15);
+    public int getMod() {
+        return (this.altura % 15);
     }
 }
 
@@ -167,7 +165,6 @@ class No {
     int elemento;
     No esq, dir;
     No2 outro;
-    
 
     public No(int elemento) {
         this(elemento, null, null, null);
@@ -184,7 +181,6 @@ class No {
 class No2 {
     Jogador elemento;
     No2 esq, dir;
-    
 
     public No2(Jogador elemento) {
         this(elemento, null, null);
@@ -204,25 +200,25 @@ class ArvoreBi {
 
     public ArvoreBi() throws Exception {
         raiz = null;
-         this.inserirMod(7);
-         this.inserirMod(3);
-         this.inserirMod(11);
-         this.inserirMod(1);
-         this.inserirMod(5);
-         this.inserirMod(9);
-         this.inserirMod(13);
-         this.inserirMod(0);
-         this.inserirMod(2);
-         this.inserirMod(4);
-         this.inserirMod(6);
-         this.inserirMod(8);
-         this.inserirMod(10);
-         this.inserirMod(12);
-         this.inserirMod(14);
+        this.inserirMod(7);
+        this.inserirMod(3);
+        this.inserirMod(11);
+        this.inserirMod(1);
+        this.inserirMod(5);
+        this.inserirMod(9);
+        this.inserirMod(13);
+        this.inserirMod(0);
+        this.inserirMod(2);
+        this.inserirMod(4);
+        this.inserirMod(6);
+        this.inserirMod(8);
+        this.inserirMod(10);
+        this.inserirMod(12);
+        this.inserirMod(14);
     }
 
     // INSERIRMod mod
-        public void inserirMod(int elemento) throws Exception {
+    public void inserirMod(int elemento) throws Exception {
         raiz = inserirMod(elemento, raiz);
     }
 
@@ -239,147 +235,111 @@ class ArvoreBi {
         return i;
     }
 
-
-
-    //INSERIR jogador mod
+    // INSERIR jogador mod
 
     public void inserir(Jogador jogador) throws Exception {
         raiz = inserir(jogador, raiz);
     }
 
     private No inserir(Jogador jogador, No i) throws Exception {
-       
-        if (i == null) {
-         throw new Exception("Erro ao inserir: JOGADOR invalido!");
 
-        } 
-        else if (jogador.getMod()<i.elemento) {
-           i.esq= inserir(jogador, i.esq);
-        } 
-        else if (jogador.getMod()>i.elemento) {// 3º
-           i.dir = inserir(jogador, i.dir);
-        } else {
-            i.outro= inserir(jogador, i.outro);
+        if (i == null) {
+            throw new Exception("Erro ao inserir: JOGADOR invalido!");
+
+        } else if (jogador.getMod() < i.elemento) {
+            i.esq = inserir(jogador, i.esq);
+        } else if (jogador.getMod() > i.elemento) {// 3º
+            i.dir = inserir(jogador, i.dir);
+        }
+        //
+        else {
+            i.outro = inserir(jogador, i.outro);
         }
         return i;
     }
 
-    //INSERIR jogador 
+    // INSERIR jogador
 
-    private No2 inserir(Jogador jogador, No2 i) throws Exception
-    {
-        if(i==null)
-        {
+    private No2 inserir(Jogador jogador, No2 i) throws Exception {
+        if (i == null) {
             i = new No2(jogador);
-        }
-        else if (jogador.getNome().compareTo(i.elemento.getNome()) < 0) 
-        {// 2º
+        } else if (jogador.getNome().compareTo(i.elemento.getNome()) < 0) {// 2º
             i.esq = inserir(jogador, i.esq);
-        } 
-        else if (jogador.getNome().compareTo(i.elemento.getNome()) > 0) 
-        {// 3º
+        } else if (jogador.getNome().compareTo(i.elemento.getNome()) > 0) {// 3º
             i.dir = inserir(jogador, i.dir);
         } else {
             throw new Exception("Erro ao inserir");
         }
 
-
         return i;
     }
 
-    
-
     // PESQUISAR
-    public void pesquisar(Jogador jogador) {
-        System.out.print(" raiz");
-        if( pesquisar(jogador, raiz))
-        {
-           
-            System.out.println(" SIM");
-        }
-        else {
-            System.out.println(" NAO");
-        }
-        }
-    
+    public boolean mostrar(String nome) throws Exception {
 
-    private boolean pesquisar(Jogador jogador, No i) {
-        /*
-         * 1º: Verifica se a arvore não esta vazia;
-         * 2º: Se o nome do elemento for o mesmo da Raiz, returna true;
-         * 3º: Se o nome do elemento for menor da Raiz, vai pra esquerda da arvore;
-         * 4º: Se o nome do elemento for meaior da Raiz, vai pra direita da arvore;
-         * OBS: se não achar nada, returna false;
-         */
+        System.out.print(nome +" raiz");
+
+        return mostrar(nome, raiz);
+    }
+
+    private boolean mostrar(String nome, No i) {
         boolean resp = false;
 
-        if (i == null) {// 1º
-            resp = false;
-        } 
-        else if (jogador.getMod()==i.elemento)// 2º
-        {
-            resp = pesquisar2(jogador, i.outro);
+        if (i != null) {
 
-        } else if (jogador.getMod()<i.elemento) // 3º
-        {   System.out.print(" ESQ");
-            resp = pesquisar(jogador, i.esq);
-        } else// 4º
-        {   
-            System.out.print(" DIR");
-            resp = pesquisar(jogador, i.dir);
+            if (!resp) {
+                resp = mostrarSub(nome, i.outro);
+            } 
+            if (!resp) {
+                System.out.print(" esq");
+                resp = mostrar(nome, i.esq);
+            }
+            if (!resp) {
+                System.out.print(" dir");
+                resp = mostrar(nome, i.dir);
+            }
+
         }
 
         return resp;
     }
-    
-    private boolean pesquisar2(Jogador jogador, No2 i) {
-        /*
-         * 1º: Verifica se a arvore não esta vazia;
-         * 2º: Se o nome do elemento for o mesmo da Raiz, returna true;
-         * 3º: Se o nome do elemento for menor da Raiz, vai pra esquerda da arvore;
-         * 4º: Se o nome do elemento for meaior da Raiz, vai pra direita da arvore;
-         * OBS: se não achar nada, returna false;
-         */
+
+    private boolean mostrarSub(String nome, No2 i) {
         boolean resp = false;
 
-       if (i == null) {// 1º
-            resp = false;
-        } else if (jogador.getNome().compareTo(i.elemento.getNome()) == 0)// 2º
-        {
-            resp = true;
-            
-        } else if (jogador.getNome().compareTo(i.elemento.getNome()) < 0) // 3º
-        {   System.out.print(" esq");
-            resp = pesquisar2(jogador, i.esq);
-        } else// 4º
-        {   
-            System.out.print(" dir");
-            resp = pesquisar2(jogador, i.dir);
+        if (i != null) {
+
+            if (nome.equals(i.elemento.getNome())) {
+                resp = true;
+            } 
+            else {
+                System.out.print(" ESQ");
+                resp = mostrarSub(nome, i.esq);
+
+                if (!resp) {
+                    System.out.print(" DIR");
+                resp = mostrarSub(nome, i.dir);
+                }
+            }
+
         }
 
         return resp;
-
-       
     }
-
-    
-
-    
-
 
 }
 
 // -------------------Main---------------------------//
 public class ArvoreArvore {
+
     public static void main(String[] args) throws Exception {
-        
-        //variaveis e objetos
+
+        // variaveis e objetos
         Scanner scan = new Scanner(System.in);
-        File tabela = new File("tmp/players.csv");
+        File tabela = new File("/tmp/players.csv");
         ArvoreBi arvore = new ArvoreBi();
 
-
-        /*Leitura do jogador e incerção na Arvore */
+        /* Leitura do jogador e incerção na Arvore */
         String pedido = scan.nextLine();
         while (!pedido.equalsIgnoreCase("FIM")) {
             Jogador player = new Jogador(pedido, tabela); // cria um jogador novo e leva o pedido para o construtor
@@ -390,11 +350,15 @@ public class ArvoreArvore {
         pedido = scan.nextLine();
         while (!pedido.equalsIgnoreCase("FIM")) {
             Jogador player = new Jogador(pedido);
-            System.out.print(player.getNome());
-            arvore.pesquisar(player);
-           
+           if( arvore.mostrar(player.getNome())){
+               System.out.println(" SIM");
+           }else{
+               System.out.println(" NAO");}
+
             pedido = scan.nextLine();
         }
+
+        // mostrar(arvore.raiz);
         scan.close();
     }
 }
