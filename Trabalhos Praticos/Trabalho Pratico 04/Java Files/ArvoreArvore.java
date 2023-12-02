@@ -261,13 +261,23 @@ class ArvoreBi {
     // INSERIR jogador
 
     private No2 inserir(Jogador jogador, No2 i) throws Exception {
-        if (i == null) {
+       
+        if (i == null) 
+        {
             i = new No2(jogador);
-        } else if (jogador.getNome().compareTo(i.elemento.getNome()) < 0) {// 2º
+        } 
+        
+        else if (jogador.getNome().compareTo(i.elemento.getNome()) < 0) 
+        {
             i.esq = inserir(jogador, i.esq);
-        } else if (jogador.getNome().compareTo(i.elemento.getNome()) > 0) {// 3º
+        } 
+       
+        else if (jogador.getNome().compareTo(i.elemento.getNome()) > 0) 
+        {
             i.dir = inserir(jogador, i.dir);
-        } else {
+        } 
+        
+        else {
             throw new Exception("Erro ao inserir");
         }
 
@@ -287,13 +297,16 @@ class ArvoreBi {
 
         if (i != null) {
 
+            //Vai em todos os nós2 do nó i e procura o nome
             if (!resp) {
                 resp = mostrarSub(nome, i.outro);
             } 
+            //Vai para a esquerda
             if (!resp) {
                 System.out.print(" esq");
                 resp = mostrar(nome, i.esq);
             }
+            //va para a direita
             if (!resp) {
                 System.out.print(" dir");
                 resp = mostrar(nome, i.dir);
