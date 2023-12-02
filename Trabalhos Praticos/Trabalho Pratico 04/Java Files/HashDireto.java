@@ -266,5 +266,6 @@ public class HashDireto {
         }
 
         scan.close();
+        //SO PRA  MUDAR O COMMIT
     }
 }
