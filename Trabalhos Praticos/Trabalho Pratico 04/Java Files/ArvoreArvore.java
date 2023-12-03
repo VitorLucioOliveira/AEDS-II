@@ -206,14 +206,14 @@ class ArvoreBi {
         this.inserirMod(1);
         this.inserirMod(5);
         this.inserirMod(9);
-        this.inserirMod(13);
+        this.inserirMod(12);
         this.inserirMod(0);
         this.inserirMod(2);
         this.inserirMod(4);
         this.inserirMod(6);
         this.inserirMod(8);
         this.inserirMod(10);
-        this.inserirMod(12);
+        this.inserirMod(13);
         this.inserirMod(14);
     }
 
