@@ -158,7 +158,7 @@ class Jogador {
 
 // -----------------------CLASSE NO---------------------------//
 class No {
-
+    
     No[] filhos;// alfabeto ASCII Maiusculo + Minusculo + Espaço
     boolean isWord;// palavra completa
 
