@@ -1,12 +1,124 @@
+import java.util.Scanner;
 
-class No {
+/*
+ * Neste codigo de arvore Trie de lista flexivel, Cada Celula  tem um No, esse No aponta pra outra celula
+
+    Celula('c')
+    |
+    No -> Celula('a')
+        |
+        No -> Celula('s')
+           |
+           No -> Celula('a', isWord = true)
+               |
+               No (vazio) 
+
+ * E o Celula.prox, Representa Celulas do mesmo nivel
     
-    No[] filhos;// alfabeto ASCII Maiusculo + Minusculo + Espaço
-    boolean isWord;// palavra completa
+             c
+             |
+             a
+            / \
+           r   s
+          |   |
+         r   a (isWord = true)
+         |
+         o (isWord = true)
+ 
+*/
 
+//----------------Classe Celula-----------------------//
+class Celula {
+
+    public char elemento;
+    public Celula prox;
+    public No no;
+
+    // contrutores
+    public Celula() {
+        this.elemento = 0;
+        this.prox = null;
+        this.no = null;
+    }
+
+    public Celula(char elemento) {
+        this.elemento = elemento;
+        this.prox = null;
+        this.no = new No(elemento);
+    }
+}
+
+// -----------------Classe NO----------------------------//
+class No {
+
+    char elemento;
+    boolean isWord;
+    private Celula primeiro, ultimo;
+
+    // construtores
     public No() {
-        this.filhos = new No[95];
+        this(' ');
+    }
+
+    public No(char elemento) {
+        this.elemento = elemento;
+        this.primeiro = this.ultimo = new Celula();
         this.isWord = false;
+    }
+
+    // inserir NO
+    public No inserir(char x) {
+        ultimo.prox = new Celula(x);
+        ultimo = ultimo.prox;
+
+        return ultimo.no;
+    }
+
+    // pesquisar NO
+    public No pesquisar(char x) {
+        No resp = null;
+
+        // retorna o No com essa letra
+        for (Celula i = primeiro.prox; i != null; i = i.prox) {
+            if (i.elemento == x) {
+                resp = i.no;
+                i = ultimo;
+            }
+        }
+
+        return resp;
+    }
+
+    // Identificar fim da palavra
+    public void setWord(char x) {
+        // Busca nas celulas da lista, a letra que mandamos e transforma ela em TRUE
+        for (Celula i = primeiro.prox; i != null; i = i.prox) {
+            if (i.elemento == x) {
+                i.no.isWord = true;
+                i = ultimo;
+
+            }
+        }
+    }
+
+    public No[] getFilho() {
+        int n = 0;//contador
+
+        //conta o numero das celulas Lista
+        for (Celula i = primeiro.prox; i != null; i = i.prox, n++);
+
+        //cria um vetor de No com o tamanho da Lista
+        No[] vet = new No[n];
+
+        //reseta o contador
+        n = 0;
+
+        // agora a gente percorre de novo a lista, inserindo os No(letras) no vetor
+        for (Celula i = primeiro.prox; i != null; i = i.prox) {
+            vet[n++] = i.no;
+        }
+
+        return vet;
     }
 
 }
@@ -21,125 +133,87 @@ class Trie {
         raiz = new No();
     }
 
-    public Trie(Trie t1, Trie t2) {
-        this();
-        this.juntar(t1);
-        this.juntar(t2);
-    }
-
-    // MÉTODO PARA JUNTAR UMA TRIE À TRIE ATUAL
-    public void juntar(Trie t) {
-        juntar(t.raiz, "");
-    }
-
-    private void juntar(No no, String s) {
-        if (no.isWord) {
-            this.inserir(s);
-        }
-        for (int i = 0; i < no.filhos.length; i++) {
-            if (no.filhos[i] != null) {
-                juntar(no.filhos[i], s + (char)(i + 32));
-            }
-        }
-    }
-
     // INSERIR
-    public void inserir(String nome) {
-        /*
-         * 1º: Salvar o No que estaremos usando para navegar;
-         * 2º: Separamos a inserção letra por letra;
-         * 2.obs: subtraimos por 'a', para ter o valor da tabela ASCII que vamos inserir;
-         * 3º: Se a letra não tiver sido inserida ainda, vamos inserir e depois avançar o No;
-         * 4º: Se a letra já tiver sido inserida, simplemente avançamos para ela;
-         * 5º: Quando o FOR acabar a palavra vai estar completa, sendo assim deixamos isWord true;
-        */
-
-        // 1º
-        No atual = this.raiz;
-
-        // 2º
-        for (int i = 0; i < nome.length(); i++) {
-            char c = nome.charAt(i);
-            // 2.obs
-            int index = c - 32;
-
-            // 3º
-            if (atual.filhos[index] == null) {
-                No node = new No();
-                atual.filhos[index] = node;
-
-                atual = node;// avançando o No
-            }
-            // 4º
-            else {
-                atual = atual.filhos[index];
-            }
-
-        }
-
-        // 5º
-        atual.isWord = true;
+    public void inserir(String s) {
+        inserir(s, raiz, 0);
     }
 
+    private void inserir(String palavra, No no, int i) {
 
-    public void pesquisar(String nome)
-    {
+        // pesquisa se já tem uma celula da lista com a mesma letra
+       
+        No filho = no.pesquisar(palavra.charAt(i));
 
-        if(pesquisar(nome, raiz))
-        {
-            System.out.println(nome+" SIM");
+        // se o filho for NULL vamos criar uma celula dele no NO
+        if (filho == null) {
+            // criamos a celula com a letra da palavra e agora o Filho não é null mais
+            
+            filho = no.inserir(palavra.charAt(i));
+
+            // Se a palavra acabou isWord é TRUE, indicando que é uma palavra completa
+            if (i == palavra.length() - 1) {
+                no.setWord(palavra.charAt(i));
+            }
+            // Se não, continuamos inserindo, com agora o FILHO, sendo o No e incrementa a letra (i+1)
+            else {
+                inserir(palavra, filho, i + 1);
+            }
         }
-        else
-        {
-            System.out.println(nome+" NAO");
+
+        // Se o Filho não for null, e ele não for a palavra completa, continuamos inserindo a partir dele
+        else if (no.isWord == false && i < palavra.length() - 1) {
+            inserir(palavra, filho, i+1);
         }
+
+    }
+
+    public void mostrar() {
+        mostrar("", raiz);
+    }
+
+    public void mostrar(String s, No no) {
+
+        /*
+         * Recursivamente, eu vou ir em cada Celula do No raiz;
+         * Desta forma eu tenho acesso a todas as palavras formadas em cadeia;
+         * E vou ir em cada uma ate encontrar uma palavra, assim printo ela;
+         * O processo se repete ate que não tenham mais palavras formadas no array de No
+        */
         
-    }
-
-
-    private boolean pesquisar(String nome, No raiz) {
-        /*
-         * 1º: Salvar o No que estaremos usando para navegar;
-         * 2º: Separamos a busca letra por letra;
-         * 2.obs: subtraimos por 'a', para ter o valor da tabela ASCII que vamosbuscar;
-         * 3º: Se a letra não tiver sido inserida ainda, retornamos false;
-         * 4º: Se a letra já tiver sido inserida, simplesmente avançamos para ela;
-         * 5º: Quando o FOR acabar a palavra vai estar completa, sendo assim verificamos se isWord é true;
-        */
-
-        // 1º
-        No atual = raiz;
-        boolean resp = false;
-
-        // 2º
-        for (int i = 0; i < nome.length(); i++) {
-            char c = nome.charAt(i);
-            // 2.obs
-            int index = c - 32;
-
-            // 3º
-            if (atual.filhos[index] == null) {
-                resp = false;
+        //se o No for o fim da palavra printamos a String mais a letra do No
+        if (no.isWord == true) {
+            if( s.length()>=5 && no.elemento=='a' || no.elemento=='e' || no.elemento=='i' || no.elemento=='o' || no.elemento=='u' ){
+            System.out.println("Palavra: " + (s + no.elemento));}
+        } 
+        else {
+            //Vou pegar todos os filhos desse No, e fazer a chamada com eles, sendo assim vou printar TODOS 
+            No[] filho = no.getFilho();
+            for (int i = 0; i < filho.length; i++) {
+                mostrar(s + no.elemento, filho[i]);
             }
-            // 4º
-            else {
-                atual = atual.filhos[index];
-            }
-
         }
-
-        // 5º
-        if (atual.isWord) {
-            resp = true;
-        } else {
-            resp = false;
-        }
-
-        return resp;
     }
 
 }
 
 public class Questao1 {
-    
+
+    public static void main(String[] args) {
+
+        Trie arvore = new Trie();
+        Scanner scan = new Scanner(System.in);
+        String pedido;
+
+       do{
+            pedido = scan.nextLine();
+            arvore.inserir(pedido);
+
+            
+       }while (!pedido.equals("fim"));
+            
+        arvore.mostrar();
+
+        scan.close();
+    }
+
 }

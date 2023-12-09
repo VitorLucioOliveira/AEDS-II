@@ -7,9 +7,6 @@
 #define MAX_ATTRIBUTES 8
 #define MAX_LEN 100
 
-int max(int a, int b) {
-    return (a > b) ? a : b;
-}
 //-------------------------------CLASSE JOGADOR-------------------------//
 typedef struct Jogador
 {
@@ -23,7 +20,6 @@ typedef struct Jogador
     char estadoNascimento[50];
 } Jogador;
 
-// metodos para dividir a string
 //-----------------------CLASSE SPLIT-------------------------//
 typedef struct Split
 {
@@ -90,7 +86,6 @@ Split SplitSpace()
     return Split;
 }
 
-// metodo para realizar a leitura de um arquivo e guardar as informacoes em um array de jogadores
 void ler(Jogador jogadores[], FILE *file)
 {
 
@@ -142,19 +137,23 @@ void dados(Jogador jogadores)
 //-------------------------CLASSE NO------------------------//
 typedef struct No
 {
-    Jogador elemento;     // Elemento inserido na celula.
+    char* elemento;     // Elemento inserido na celula.
     struct No *dir, *esq; // Aponta a celula prox.
     int nivel;            // Altura do nó
 
 } No;
 
-No *newNo(Jogador elemento)
+No *newNo(char* elemento)
 {
     No *nova = (No *)malloc(sizeof(No));
     nova->elemento = elemento;
     nova->esq = nova->dir = NULL;
     nova->nivel = 1; // novo nó é inicialmente adicionado nas folhas
     return nova;
+}
+
+int max(int a, int b) {
+    return (a > b) ? a : b;
 }
 
 // Nivel DO NO//
@@ -222,7 +221,7 @@ No *rotacaoEsquerda(No *no)
 }
 
 // INSERIR NA ARVORE//
-No *inserir(Jogador jogador, No *i)
+No *inserir(char* string, No *i)
 {
 
     /*
@@ -236,15 +235,15 @@ No *inserir(Jogador jogador, No *i)
     // 1º
     if (i == NULL)
     {
-        i = newNo(jogador);
+        i = newNo(string);
     }
-    else if ((strcmp(jogador.nome, (i)->elemento.nome) < 0))
+    else if ((strcmp(string, (i)->elemento) < 0))
     {
-        i->esq = inserir(jogador, i->esq);
+        i->esq = inserir(string, i->esq);
     }
-    else if ((strcmp(jogador.nome, i->elemento.nome) > 0))
+    else if ((strcmp(string, i->elemento) > 0))
     {
-        i->dir = inserir(jogador, i->dir);
+        i->dir = inserir(string, i->dir);
     }
     else
     {
@@ -260,23 +259,23 @@ No *inserir(Jogador jogador, No *i)
     // 4º
 
     // Rotacao simples a direita
-    if (balanceamento > 1 && (strcmp(jogador.nome, i->dir->elemento.nome) > 0))
+    if (balanceamento > 1 && (strcmp(string, i->dir->elemento) > 0))
     {
         i = rotacaoEsquerda(i);
     }
     // Rotacao simples a esquerda
-     if (balanceamento < -1 && (strcmp(jogador.nome, i->esq->elemento.nome) < 0))
+     if (balanceamento < -1 && (strcmp(string, i->esq->elemento) < 0))
     {
         i = rotacaoDireita(i);
     }
     // Rotacao dupla a direita
-    if (balanceamento > 1 && (strcmp(jogador.nome, i->dir->elemento.nome) < 0))
+    if (balanceamento > 1 && (strcmp(string, i->dir->elemento) < 0))
     {
         i->dir = rotacaoDireita(i->dir);
         i = rotacaoEsquerda(i);
     }
     // Rotacao dupla a esquerda
-     if (balanceamento < -1 && (strcmp(jogador.nome, i->esq->elemento.nome) > 0))
+     if (balanceamento < -1 && (strcmp(string, i->esq->elemento) > 0))
     {
         i->esq = rotacaoEsquerda(i->esq);
         i = rotacaoDireita(i);
@@ -294,19 +293,19 @@ bool pesquisar(char nome[], No *i)
     {
         resp = false;
     }
-    else if ((strcmp(nome, i->elemento.nome) == 0))
-    {
-        resp = true;
-    }
-    else if (strcmp(nome, i->elemento.nome) < 0)
+    else if (strcmp(nome, i->elemento) < 0)
     {
         printf(" esq");
         resp = pesquisar(nome, i->esq);
     }
-    else if ((strcmp(nome, i->elemento.nome) > 0))
+    else if ((strcmp(nome, i->elemento) > 0))
     {
         printf(" dir");
         resp = pesquisar(nome, i->dir);
+    }
+     else 
+    {
+        resp = true;
     }
 
     return resp;
@@ -314,11 +313,20 @@ bool pesquisar(char nome[], No *i)
 
 
 //-------------------------CLASSE ARVORE------------------------//
-typedef struct ArvoreAVL
+typedef struct AVL
 {
     No *raiz;
 
-} ArvoreAVL;
+} AVL;
+
+AVL* newAVL()
+{
+    AVL* arvore = (AVL*)malloc(sizeof(AVL));
+    arvore->raiz=NULL;
+    return arvore;
+
+}
+
 
 
 //-------------------------------MAIN---------------------------------//
@@ -328,8 +336,8 @@ int main()
     char id[50];
     char nome[50];
     Jogador jogadores[3922];
-    ArvoreAVL arvore;
-    arvore.raiz = NULL;
+    AVL* arvore = newAVL();
+
 
     FILE *file = fopen("/tmp/players.csv", "r");
     do
@@ -339,7 +347,7 @@ int main()
         {
             int identificador = atoi(id);
             ler(jogadores, file);
-            arvore.raiz = inserir(jogadores[identificador], arvore.raiz);
+            arvore->raiz = inserir(jogadores[identificador].nome, arvore->raiz);
         }
     } while ((strcmp(id, "FIM") != 0) && (strcmp(id, "fim") != 0));
 
@@ -354,7 +362,7 @@ int main()
         {
 
             printf("%s raiz", nome);
-            if (pesquisar(nome, arvore.raiz))
+            if (pesquisar(nome, arvore->raiz))
             {
                 printf(" SIM\n");
             }
