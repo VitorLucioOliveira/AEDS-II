@@ -360,26 +360,19 @@ class Alvenegra {
     
     //ROTAÇÕES
     
-    private NoAN rotacaoESQ(NoAN no) {
-        
-        NoAN noDir = no.dir;
-        NoAN noDirEsq = noDir.esq;
-        
-        noDir = no;
-        no.dir = noDirEsq;
-        
-        return noDir;
-    }
-    
-    private NoAN rotacaoDIR(NoAN no) {
-        NoAN noEsq = no.esq;
-        NoAN noEsqDir = noEsq.dir;
+private NoAN rotacaoESQ(NoAN no) {
+    NoAN noDir = no.dir;
+    no.dir = noDir.esq;
+    noDir.esq = no;
+    return noDir;
+}
 
-        noEsq.dir = no;
-        no.esq = noEsqDir;
-
-        return noEsq;
-    }
+private NoAN rotacaoDIR(NoAN no) {
+    NoAN noEsq = no.esq;
+    no.esq = noEsq.dir;
+    noEsq.dir = no;
+    return noEsq;
+}
 
     private NoAN rotacaoDirESQ(NoAN no) {
         no.dir = rotacaoDIR(no.dir);
