@@ -146,7 +146,7 @@ class Jogador {
     }
 
     public int getMod() {
-        return (this.altura % 25);
+        return (this.altura % 21);
     }
 
 }
@@ -158,7 +158,7 @@ class Hash {
     int tt;
 
     public Hash() {
-        this(25);
+        this(21);
     }
 
     public Hash(int tt) {
@@ -169,7 +169,7 @@ class Hash {
     }
 
     private int reHash(Jogador jogador) {
-        return (jogador.getAltura() + 1) % 25;
+        return (jogador.getAltura() + 1) % 21;
     }
 
     public boolean inserir(Jogador jogador) {

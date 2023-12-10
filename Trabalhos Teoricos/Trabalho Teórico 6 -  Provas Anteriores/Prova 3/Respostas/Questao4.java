@@ -30,10 +30,14 @@ class AVL {
         } else if (s.compareTo(no.elemento) < 0) {
             no.esq = inserir(s, no.esq);
         } else if (s.compareTo(no.elemento) > 0) {
-            no.dir = inserir(s, no.esq);
+            no.dir = inserir(s, no.dir);
         }
 
         return balancear(no);
+    }
+
+    private No balancear(No no) {
+        return null;
     }
 
 }
