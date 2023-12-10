@@ -240,6 +240,7 @@ bool pesquisar(char nome[], Hash *hash)
 int main()
 {
 
+    char charProblematico[2] = {13};
     char id[50];
     char nome[50];
     Jogador jogadores[3922];
@@ -249,6 +250,7 @@ int main()
     do
     {
         scanf("%s", id);
+        id[strcspn(id, charProblematico)]='\0';
         if (strcmp(id, "FIM") != 0 && strcmp(id, "fim") != 0)
         {
             int identificador = atoi(id);
@@ -261,11 +263,13 @@ int main()
     {
 
         scanf(" %[^\n]", nome);
+        nome[strcspn(nome, charProblematico)]='\0';
 
         if (strcmp(nome, "FIM") != 0 && strcmp(nome, "fim") != 0)
         {
 
             printf("%s", nome);
+            
             if (pesquisar(nome, hash))
             {
                 printf(" SIM\n");
