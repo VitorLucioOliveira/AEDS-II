@@ -3,6 +3,7 @@
 #include <string.h>
 #include <time.h>
 #include <stdlib.h>
+#include "math.h"
 #define MAXTAM 500
 #define MAX_ATTRIBUTES 8
 #define MAX_LEN 100
@@ -162,6 +163,12 @@ int getNivel(No *no)
     return (no == NULL) ? 0 : no->nivel;
 }
 
+//Aumentar Nivel
+void setNivel(No* no)
+{
+    no->nivel = max(getNivel(no->esq), getNivel(no->dir)) + 1;
+}
+
 // Balanceamento DO NO//
 int getBalanceamento(No *no)
 {
@@ -189,8 +196,8 @@ No *rotacaoDireita(No *no)
     no->esq = noEsqDir;
 
     // 4º
-    no->nivel = max(getNivel(no->esq), getNivel(no->dir)) + 1;
-    noEsq->nivel = max(getNivel(noEsq->esq), getNivel(noEsq->dir)) + 1;
+    setNivel(no);
+    setNivel(noEsq);
 
     return noEsq;
 }
@@ -214,11 +221,51 @@ No *rotacaoEsquerda(No *no)
     no->dir = noDirEsq;
 
     // 4º
-    no->nivel = max(getNivel(no->esq), getNivel(no->dir)) + 1;
-    noDir->nivel = max(getNivel(noDir->esq), getNivel(noDir->dir)) + 1;
+    setNivel(no);
+    setNivel(noDir);
 
     return noDir;
 }
+
+No * balancear(No* no)
+{
+
+    if(no!=NULL)
+    {
+        int fator = getNivel(no->dir) - getNivel(no->esq);
+         if(abs(fator)<=1)
+         {
+            setNivel(no);
+         }
+         
+         else if (fator == 2)
+         {
+             int nivelFilho = getNivel(no->dir->dir)- getNivel(no->dir->esq);
+
+             if(nivelFilho == -1)
+             {
+                no->dir = rotacaoDireita(no->dir);
+             }
+             no=rotacaoEsquerda(no);
+         }
+        else if(fator == -2)
+        {
+            int nivelFilho = getNivel(no->esq->dir)- getNivel(no->esq->esq);
+
+            if(nivelFilho == 1)
+            {
+                no->esq = rotacaoEsquerda(no->esq);
+            }
+           
+            no=rotacaoDireita(no);
+        }
+        else{
+            printf("!ERRO!, fator = %d", fator);
+        } 
+    }
+    return no;
+}
+
 
 // INSERIR NA ARVORE//
 No *inserir(char* string, No *i)
@@ -250,38 +297,8 @@ No *inserir(char* string, No *i)
         printf("Erro ao inserir!");
     }
 
-    // 2º
-    i->nivel = 1 + max(getNivel(i->esq), getNivel(i->dir));
-
-    // 3º
-    int balanceamento = getBalanceamento(i);
-
-    // 4º
-
-    // Rotacao simples a direita
-    if (balanceamento > 1 && (strcmp(string, i->dir->elemento) > 0))
-    {
-        i = rotacaoEsquerda(i);
-    }
-    // Rotacao simples a esquerda
-     if (balanceamento < -1 && (strcmp(string, i->esq->elemento) < 0))
-    {
-        i = rotacaoDireita(i);
-    }
-    // Rotacao dupla a direita
-    if (balanceamento > 1 && (strcmp(string, i->dir->elemento) < 0))
-    {
-        i->dir = rotacaoDireita(i->dir);
-        i = rotacaoEsquerda(i);
-    }
-    // Rotacao dupla a esquerda
-     if (balanceamento < -1 && (strcmp(string, i->esq->elemento) > 0))
-    {
-        i->esq = rotacaoEsquerda(i->esq);
-        i = rotacaoDireita(i);
-    }
-
-    return i;
+    
+    return  balancear(i);
 }
 
 // PESQUISAR NA ARVORE//
