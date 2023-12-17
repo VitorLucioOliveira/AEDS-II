@@ -15,7 +15,7 @@ public class Questao4 {
     treeSort(arvore.raiz, array);
   }
 
-  private static void treeSort(No i, int[] array) { //0(n)
+  private static void treeSort(No i, int[] array) { //0(n log n)
     if (raiz != null) {
       
       treeSort(i.esq, array);
