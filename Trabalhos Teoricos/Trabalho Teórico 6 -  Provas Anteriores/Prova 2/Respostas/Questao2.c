@@ -5,7 +5,7 @@ Celula* encontrarRepetidos(No* raiz, CelulaMatriz* inicio)
 
 
     
-  MontarListaRepetidos(raiz, j, lista);
+    MontarListaRepetidos(raiz, j, lista);
    
     return lista
 }

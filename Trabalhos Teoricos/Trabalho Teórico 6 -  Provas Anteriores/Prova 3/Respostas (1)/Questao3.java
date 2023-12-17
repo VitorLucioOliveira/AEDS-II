@@ -54,7 +54,6 @@ public class Questao3 {
 
         return resp;
     }
-
     //PESQUISAR NA ARVORE
     private boolean pesquisarT2(No i, String palavra)
     {

@@ -12,7 +12,7 @@ public class Questao4 {
       arvore.inserir(array[i]);
     }
 
-    treeSort(aevore.raiz, array);
+    treeSort(arvore.raiz, array);
   }
 
   private static void treeSort(No i, int[] array) { //0(n)
