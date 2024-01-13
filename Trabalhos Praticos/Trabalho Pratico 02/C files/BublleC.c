@@ -21,7 +21,7 @@ typedef struct Jogador
 } Jogador;
 
 // funcao para ordenar os jogadores com base na ordem de ano de nascimento
-void bublle(Jogador jogadores[], int tam)
+void bublle(int jogadores[], int tam)
 {
 
     for (int i = tam - 1; i > 0; i--)
