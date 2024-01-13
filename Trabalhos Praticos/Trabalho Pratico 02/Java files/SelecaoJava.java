@@ -177,6 +177,7 @@ public class SelecaoJava {
     for (int i = 0; i < fim; i++) {
       int menor = i;
       contador++;
+     
       for (int j = i + 1; j < fim; j++) {
         if (jocker[j].getNome().compareTo(jocker[menor].getNome()) < 0) {// qual o menor nome
           menor = j;
